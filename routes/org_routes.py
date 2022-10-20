@@ -26,10 +26,10 @@ def get_org_by_id(org_id):
     org = db.session.query(Organizations).filter(Organizations.org_id == org_id).first()
 
     if org:
-        return jsonify(organization_schema.dump(org))
+        return jsonify(organization_schema.dump(org)), 200
 
     else:
-        return jsonify("Invalid Organizaion")
+        return jsonify("Invalid Organizaion"), 404
 
 
 @orgs.route("/org/update/<org_id>", methods=["POST"])
