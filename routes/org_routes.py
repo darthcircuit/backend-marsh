@@ -1,5 +1,10 @@
 from flask import jsonify, request, Blueprint
-from organizations import Organizations, organization_schema, organizations_schema
+from organizations import (
+    Organizations,
+    OrganizationsSchema,
+    organization_schema,
+    organizations_schema,
+)
 from db import db, populate_object
 
 
@@ -14,6 +19,17 @@ def get_all_active_org_ids_route():
         return jsonify(organizations_schema.dump(org_ids)), 200
     else:
         return jsonify("No matching records"), 404
+
+
+@orgs.route("/org/get/<org_id>")
+def get_org_by_id(org_id):
+    org = db.session.query(Organizations).filter(Organizations.org_id == org_id).first()
+
+    if org:
+        return jsonify(organization_schema.dump(org))
+
+    else:
+        return jsonify("Invalid Organizaion")
 
 
 @orgs.route("/org/update/<org_id>", methods=["POST"])

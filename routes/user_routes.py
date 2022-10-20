@@ -16,6 +16,16 @@ def get_all_active_users_route():
         return jsonify("No matching records"), 404
 
 
+def get_user_by_id(user_id):
+    user = db.session.query(Users).filter(Users.user_id == user_id).first()
+
+    if user:
+        return jsonify(user_schema.dump(user))
+
+    else:
+        return jsonify("Invalid Organizaion")
+
+
 @users.route("/user/update/<user_id>", methods=["POST"])
 def update_user_route(user_id):
     user_ojb = db.session.query(Users).filter(Users.user_id == user_id).first()
